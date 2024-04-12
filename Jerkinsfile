@@ -1,0 +1,11 @@
+node {
+  stage('SCM') {
+    git branch: 'main', credentialsId: 'bananaplayctf-github', url: 'https://github.com/bananaplayctf/TestRepo.git'
+  }
+  stage('SonarQube Analysis') {
+    def scannerHome = tool 'SonarScanner';
+    withSonarQubeEnv() {
+      sh "${scannerHome}/bin/sonar-scanner -Dsonar.java.binaries=. -Dsonar.projectKey=TestRepo -Dsonar.login=sqa_7097bfe735436c0ffa3462e17b0942fb237612ca"
+    }
+  }
+}
